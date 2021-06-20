@@ -53,11 +53,11 @@ add_action( 'admin_init', 'ch4_br_admin_init' );
 
 // Function to register new meta box for book review post editor
 function ch4_br_admin_init() {
-	add_meta_box( 'ch4_br_review_details_meta_box', 'Book Review Details', 'ch4_br_display_review_details_meta_box', 'book_reviews', 'normal', 'high' );
+	add_meta_box( 'ch4_br_review_details_meta_box', 'Book Review Details', 'ch4_br_display_review_details_mb', 'book_reviews', 'normal', 'high' );
 }
 
 // Function to display meta box contents
-function ch4_br_display_review_details_meta_box( $book_review ) { 
+function ch4_br_display_review_details_mb( $book_review ) { 
 	// Retrieve current author and rating based on book review ID
 	$book_author = get_post_meta( $book_review->ID, 'book_author', true );
 	$book_rating = get_post_meta( $book_review->ID, 'book_rating', true );
@@ -87,16 +87,15 @@ function ch4_br_display_review_details_meta_box( $book_review ) {
 // The function will receive 2 arguments
 add_action( 'save_post', 'ch4_br_add_book_review_fields', 10, 2 );
 
-function ch4_br_add_book_review_fields( $post_id = false, $post = false ) {
-	// Check post type for book reviews
-	if ( 'book_reviews' == $post->post_type ) {
-		// Store data in post meta table if present in post data
-		if ( isset( $_POST['book_review_author_name'] ) ) {
-			update_post_meta( $post_id, 'book_author', sanitize_text_field( $_POST['book_review_author_name'] ) );
-		}
-		
-		if ( isset( $_POST['book_review_rating'] ) && !empty( $_POST['book_review_rating'] ) ) {
-			update_post_meta( $post_id, 'book_rating', intval( $_POST['book_review_rating'] ) );
-		}
+function ch4_br_add_book_review_fields( $book_review_id, $book_review ) {
+	if ( 'book_reviews' != $book_review->post_type ) {
+		return;
+	}
+
+	if ( isset( $_POST['book_review_author_name'] ) ) {
+		update_post_meta( $book_review_id, 'book_author', sanitize_text_field( $_POST['book_review_author_name'] ) );
+	}
+	if ( isset( $_POST['book_review_rating'] ) && !empty( $_POST['book_review_rating'] ) ) {
+		update_post_meta( $book_review_id, 'book_rating', intval( $_POST['book_review_rating'] ) );
 	}
 }
