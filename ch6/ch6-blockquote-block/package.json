@@ -1,0 +1,15 @@
+{
+  "name": "ch6-blockquote-block",
+  "version": "1.0.0",
+  "description": "Blockquote example for block editor",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "wp-scripts build"
+  },
+  "author": "ylefebvre",
+  "license": "GPL-2.0-only",
+  "devDependencies": {
+    "@wordpress/scripts": "16.1.4"
+  }
+}
