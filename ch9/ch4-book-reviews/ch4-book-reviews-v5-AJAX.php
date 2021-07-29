@@ -1,9 +1,9 @@
 <?php
 
 /*
-  Plugin Name: Chapter 4 - Book Reviews V8
+  Plugin Name: Chapter 4 - Book Reviews V5
   Plugin URI: 
-  Description: Companion to recipe 'Hiding the category editor from the custom post type editor'
+  Description: Companion to recipe 'Displaying custom post type data in shortcodes'
   Author: ylefebvre
   Version: 1.0
   Author URI: http://ylefebvre.ca/
@@ -39,24 +39,7 @@ function ch4_br_create_book_post_type() {
 		'taxonomies' => array( '' ),
 		'menu_icon' => 'dashicons-book-alt',
 		'has_archive' => false,
-		'exclude_from_search' => false
-		)
-	);
-	
-	/* Code from recipe 'Adding custom taxonomies for custom post types */    
-	register_taxonomy(
-		'book_reviews_book_type',
-		'book_reviews',
-		array(
-			'labels' => array(
-				'name' => 'Book Type',
-				'add_new_item' => 'Add New Book Type',
-				'new_item_name' => "New Book Type Name"
-			),
-			'show_ui' => true,
-			'meta_box_cb' => false,
-			'show_tagcloud' => false,
-			'hierarchical' => true
+		'exclude_from_search' => false 
 		)
 	);
 }
@@ -96,42 +79,6 @@ function ch4_br_display_review_details_mb( $book_review ) {
 				</select>
 			</td>
 		</tr>
-		
-		<!-- *********************************************************
-			* Code from recipe 'Hiding the taxonomy editor from the
-			* post editor while remaining in the admin menu'
-			******************************************************* -->
-		<tr>
-			<td>Book Type</td>
-			<td>
-				<?php 
-
-				// Retrieve array of types assigned to post
-				$assigned_types = wp_get_post_terms( $book_review->ID, 'book_reviews_book_type' );
-				
-				// Retrieve array of all book types in system
-				$book_types = get_terms( 'book_reviews_book_type', 
-                                                         array( 'orderby' => 'name',
-                                                                'hide_empty' => 0 ) );
-				
-				// Check if book types were found
-				if ( $book_types ) {
-					echo '<select name="book_review_book_type" style="width: 400px">';
-					
-					echo '<option value="">Select type</option>';
-
-					// Display all book types
-					foreach ( $book_types as $book_type ) {
-						echo '<option value="' . intval( $book_type->term_id ) . '" ';
-						if ( !empty( $assigned_types ) ) {
-							selected( $assigned_types[0]->term_id, $book_type->term_id );
-						}
-						echo '>' . esc_html( $book_type->name ) . '</option>';
-					}
-					echo '</select>';
-		} ?>
-			</td>
-		</tr>
 	</table>
 
 <?php }
@@ -150,15 +97,6 @@ function ch4_br_add_book_review_fields( $book_review_id, $book_review ) {
 	}
 	if ( isset( $_POST['book_review_rating'] ) && !empty( $_POST['book_review_rating'] ) ) {
 		update_post_meta( $book_review_id, 'book_rating', intval( $_POST['book_review_rating'] ) );
-	}
-
-	/*******************************************************************
-	* Code from recipe 'Hiding the taxonomy editor from the post editor 
-	* while remaining in the admin menu'
-	*******************************************************************/
-
-	if ( isset( $_POST['book_review_book_type'] ) ) {
-		wp_set_post_terms( $book_review->ID, intval( $_POST['book_review_book_type'] ), 'book_reviews_book_type' );
 	}
 }
 
@@ -205,20 +143,6 @@ function ch4_br_display_single_book_review( $content ) {
 
 	$content .= str_repeat( '<img style="margin: 0" src="' . plugins_url( 'star-icon.png', __FILE__ ) . '" />', $nb_stars );
 	$content .= str_repeat( '<img style="margin: 0" src="' . plugins_url( 'star-icon-grey.png', __FILE__ ) . '" />', 5 - $nb_stars );
-	
-	$book_types = wp_get_post_terms( get_the_ID(), 'book_reviews_book_type' ); 
- 
-	$content .= '<br /><strong>Type: </strong>';
-
-	if ( $book_types ) {
-		$type_array = array();
-		foreach ( $book_types as $book_type ) {
-			$type_array[] = $book_type->name;
-		}
-		$content .= esc_html( implode( ',', $type_array ) );
-	} else {
-		$content .= 'None Assigned';
-	}
 
 	// Display book review contents
 	$content .= '<br /><br />' . get_the_content( get_the_ID() ) . '</div>';
@@ -275,110 +199,116 @@ function ch4_br_review_title( $title, $id = null ) {
  ****************************************************************************/
 
 add_shortcode( 'book-review-list', 'ch4_br_book_review_list' );
+add_action( 'wp_ajax_ch4_br_ajax', 'ch4_br_book_review_list' ); 
+add_action( 'wp_ajax_nopriv_ch4_br_ajax', 'ch4_br_book_review_list' );
 
-// Implementation of short code function
 function ch4_br_book_review_list() {
-	// Preparation of query array to retrieve 5 book reviews
-	$query_params = array( 'post_type' => 'book_reviews',
-                           'post_status' => 'publish',
-                           'posts_per_page' => 5 );
+	global $paged;
+	$output = '';
 	
-	// Retrieve page query variable, if present
-	$page_num = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
-
-	// If page number is higher than 1, add to query array
-	if ( $page_num != 1 ) {
-		$query_params['paged'] = $page_num;
+	if ( isset( $_POST['action'] ) && 'ch4_br_ajax' == $_POST['action'] ) {
+		check_ajax_referer( 'ch4_br_ajax' );
 	}
-
-	// Execution of post query
-	$book_review_query = new WP_Query;
-    $book_review_query->query( $query_params );
 	
-	// Check if any posts were returned by query
+	$query_params = array( 'post_type' => 'book_reviews', 'post_status' => 'publish', 'posts_per_page' => 5 );
+	
+	$page_num = 1;
+	if ( isset( $_POST['page_number'] ) && !empty( $_POST['page_number'] ) ) {
+		$page_num = intval( $_POST['page_number'] );
+		$paged = $page_num;
+	} elseif ( !empty( get_query_var( 'paged' ) ) ) {
+		$page_num = intval( get_query_var( 'paged' ) );
+	} else {
+		$output .= '<script type="text/javascript">';
+		$output .= 'var page_num = ' . $page_num . ';';
+		$output .= '</script>';
+	}
+	
+	$query_params['paged'] = $page_num;
+
+	$book_review_query = new WP_Query( $query_params );
 	if ( $book_review_query->have_posts() ) {
-		// Display posts in table layout
-		$output = '<table>';
+		$output .= '<div id="book_review_table">';
+		$output .= '<table>';
 		$output .= '<tr><th><strong>Title</strong></th>';
 		$output .= '<th><strong>Author</strong></th></tr>';
 
-		// Cycle through all items retrieved
 		while ( $book_review_query->have_posts() ) {
 			$book_review_query->the_post();
-			$output .= '<tr><td><a href="' . get_permalink() . '">';
-			$output .= get_the_title( get_the_ID() ) . '</a></td>';
-			$output .= '<td>' . esc_html( get_post_meta( get_the_ID(), 'book_author', true ) );
+			$output .= '<tr><td><a href="' . get_permalink();
+			$output .= '">' . get_the_title( get_the_ID() );
+			$output .= '</a></td><td>';
+			$output .= esc_html( get_post_meta( get_the_ID(), 'book_author', true ) );
 			$output .= '</td></tr>';
 		}
-
 		$output .= '</table>';
 
-		// Display page navigation links
 		if ( $book_review_query->max_num_pages > 1 ) {
 			$output .= '<nav id="nav-below">';
 			$output .= '<div class="nav-previous">';
-			$output .= get_next_posts_link( '<span class="meta-nav">&larr;</span> Older reviews', $book_review_query->max_num_pages );
-			$output .= '</div>';
-			$output .= "<div class='nav-next'>";
-			$output .= get_previous_posts_link( 'Newer reviews <span class="meta-nav">&rarr;</span>', $book_review_query->max_num_pages );
-			$output .= '</div>';
-			$output .= '</nav>';
+			$output .= get_next_posts_link ( '<span class="meta-nav">&larr;</span>' . ' Older reviews', $book_review_query->max_num_pages );
+			$output .= '</div><div class="nav-next">';
+			$output .= get_previous_posts_link( 'Newer reviews ' . '<span class="meta-nav">&rarr;</span>', $book_review_query->max_num_pages );
+			$output .= '</div></nav>';
 		}
 
-		// Reset post data query
-		wp_reset_postdata();
+		$output .= '</div>';
 	}
+	wp_reset_postdata();
 
-	return $output;
+	if ( isset( $_POST['action'] ) && 'ch4_br_ajax' == $_POST['action'] ) {
+		echo $output;
+		die();
+	} else {
+		return $output;
+	}
+}	
+
+add_action( 'wp_enqueue_scripts', 'ch4_br_load_jquery' );
+
+function ch4_br_load_jquery() { 
+    wp_enqueue_script( 'jquery' );
 }
 
-/****************************************************************************
- * Code from recipe 'Adding custom fields to categories'
- ****************************************************************************/
+add_action( 'wp_footer', 'ch4_br_footer_scripts' );
 
-add_action( 'book_reviews_book_type_edit_form_fields', 'ch4_br_book_type_new_fields', 10, 2 );
-add_action( 'book_reviews_book_type_add_form_fields', 'ch4_br_book_type_new_fields', 10, 2 );
+function ch4_br_footer_scripts() { 
+	$nonce = wp_create_nonce( 'ch4_br_ajax' ); ?>
+	<script type="text/javascript">
+		function remove_links_register_callbacks() {
+			jQuery( "#book_review_table .nav-previous > a" ).removeAttr( "href" );
+			jQuery( "#book_review_table .nav-next > a" ).removeAttr( "href" );
+			jQuery( ".nav-previous" ).click( function() { 
+				page_num++;
+				replacecontent( page_num ); 
+			} ); 
+			jQuery( ".nav-next" ).click( function() {
+				page_num--;
+				replacecontent( page_num );
+			} );
+		}
 
-function ch4_br_book_type_new_fields( $tag ) {
-	$mode = 'new';
+		function replacecontent( page_num ) { jQuery.ajax( {
+			type: "POST",
+			url: "<?php echo admin_url( 'admin-ajax.php' ); ?>",
+			data: { action: "ch4_br_ajax",
+					_ajax_nonce: "<?php echo $nonce; ?>",
+					page_number: page_num },
+			success: function( data ) {
+				jQuery( "#book_review_table" ).html( data );
+				remove_links_register_callbacks();
+			}
+		})}
+
+		jQuery( document ).ready( function() {    
+			remove_links_register_callbacks();
+		});
+	</script>
+<?php }
+
+
 	
-	if ( is_object( $tag ) ) {
-		$mode = 'edit';
-		$cat_color = get_term_meta( $tag->term_id, 'book_type_color', true );
-	}
-	$cat_color = empty( $cat_color ) ? '#' : $cat_color;
 
-	if ( 'edit' == $mode ) {
-		echo '<tr class="form-field">';
-		echo '<th scope="row" valign="top">';
-	} elseif ( 'new' == $mode ) {
-		echo '<div class="form-field">';
-	} ?>
 
-	<label for="book_type_color">Color</label>
-	<?php if ( 'edit' == $mode ) {
-		echo '</th><td>';
-	} ?>
 
-	<input type="text" id="book_type_color" name="book_type_color" value="<?php echo $cat_color; ?>" />
-	<p class="description">Color associated with book type (e.g. #199C27 or #CCC)</p>
 
-	<?php if ( 'edit' == $mode ) {
-		echo '</td></tr>';
-	} elseif ( 'new' == $mode ) {
-		echo '</div>';
-	}
-}
-
-add_action( 'edited_book_reviews_book_type', 'ch4_br_save_book_type_new_fields', 10, 2 );
-add_action( 'created_book_reviews_book_type', 'ch4_br_save_book_type_new_fields', 10, 2 );
-
-function ch4_br_save_book_type_new_fields( $term_id, $tt_id ) {
-	if ( !$term_id || !isset( $_POST['book_type_color'] ) ) {
-		return;
-	}
-
-	if ( '#' == $_POST['book_type_color'] || preg_match( '/#([a-f0-9]{3}){1,2}\b/i', $_POST['book_type_color'] ) ) {
-		update_term_meta( $term_id, 'book_type_color', sanitize_text_field( $_POST['book_type_color'] ) );
-	}
-}

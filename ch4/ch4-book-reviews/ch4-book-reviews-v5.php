@@ -223,7 +223,7 @@ function ch4_br_book_review_list() {
 	if ( $book_review_query->have_posts() ) {
 		// Display posts in table layout
 		$output = '<table>';
-		$output .= '<tr><strong>Title</strong></th>';
+		$output .= '<tr><th><strong>Title</strong></th>';
 		$output .= '<th><strong>Author</strong></th></tr>';
 
 		// Cycle through all items retrieved
