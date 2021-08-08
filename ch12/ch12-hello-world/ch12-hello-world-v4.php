@@ -81,7 +81,7 @@ add_shortcode( 'hello-world', 'ch12hw_hello_world_shortcode' );
 function ch12hw_hello_world_shortcode() {
 	$options = get_option( 'ch12hw_options' );
 
-	$output = sprintf( __( 'The current message is: %s.', 'ch12hw_hello_world' ), $options['message'] );
+	$output = '<p>' . sprintf( __( 'The current message is: %s.', 'ch12hw_hello_world' ), $options['message'] ) . '</p>';
 	return $output;
 }
 
