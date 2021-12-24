@@ -31,7 +31,7 @@ function ch4_br_create_book_post_type() {
 				'search_items' => 'Search Book Reviews',
 				'not_found' => 'No Book Reviews found',
 				'not_found_in_trash' => 'No Book Reviews found in Trash',
-				'parent' => 'Parent Book Review'
+				'parent' => 'Parent Book Review',
 			),
 		'public' => true,
 		'menu_position' => 20,
@@ -39,7 +39,24 @@ function ch4_br_create_book_post_type() {
 		'taxonomies' => array( '' ),
 		'menu_icon' => 'dashicons-book-alt',
 		'has_archive' => false,
-		'exclude_from_search' => false 
+		'exclude_from_search' => false, 
+		)
+	);
+	
+	/* Code from recipe 'Adding custom taxonomies for custom post types */    
+	register_taxonomy(
+		'book_reviews_book_type',
+		'book_reviews',
+		array(
+			'labels' => array(
+				'name' => 'Book Type',
+				'add_new_item' => 'Add New Book Type',
+				'new_item_name' => 'New Book Type Name',
+			),
+			'show_ui' => true,
+			'meta_box_cb' => false,
+			'show_tagcloud' => false,
+			'hierarchical' => true,
 		)
 	);
 }

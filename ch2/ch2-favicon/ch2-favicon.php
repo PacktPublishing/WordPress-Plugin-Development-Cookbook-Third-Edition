@@ -18,7 +18,7 @@ function ch2fi_page_header_output() {
 		$icon = plugins_url( 'favicon.ico', __FILE__ );
 ?>
 
-    <link rel="shortcut icon" href="<?php echo $icon; ?>" />
+    <link rel="shortcut icon" href="<?php echo esc_url( $icon ); ?>" />
  <?php  
 	}
 }

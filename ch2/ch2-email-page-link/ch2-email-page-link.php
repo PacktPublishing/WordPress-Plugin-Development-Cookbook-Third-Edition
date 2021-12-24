@@ -31,7 +31,7 @@ function ch2epl_email_page_filter ( $the_content ) {
     $new_content .= '%0A%0AEnjoy!">';
 
 	$new_content .= '<img alt="Email icon" src="';
-	$new_content .= $mail_icon_url. '" /></a>';
+	$new_content .= esc_url( $mail_icon_url ) . '" /></a>';
 	
 	$new_content .= '</div>';
 
