@@ -299,15 +299,19 @@ function ch4_br_book_review_list() {
 	if ( $book_review_query->have_posts() ) {
 		// Display posts in table layout
 		$output = '<table>';
-		$output .= '<tr><th><strong>Title</strong></th>';
-		$output .= '<th><strong>Author</strong></th></tr>';
+		$output .= '<tr><th style="text-align:left;"> ';
+		$output .= '<strong>Title</strong></th>';
+		$output .= '<th style="text-align:left">';
+		$output .= '<strong>Author</strong></th></tr>';
 
 		// Cycle through all items retrieved
 		while ( $book_review_query->have_posts() ) {
 			$book_review_query->the_post();
-			$output .= '<tr><td><a href="' . get_permalink() . '">';
-			$output .= get_the_title( get_the_ID() ) . '</a></td>';
-			$output .= '<td>' . esc_html( get_post_meta( get_the_ID(), 'book_author', true ) );
+			$output .= '<tr><td style="padding-right: 20px">';
+			$output .= '<a href="' . get_permalink();
+			$output .= '">' . get_the_title( get_the_ID() );
+			$output .= '</a></td><td>';
+			$output .= esc_html( get_post_meta( get_the_ID(), 'book_author', true ) );
 			$output .= '</td></tr>';
 		}
 
@@ -418,8 +422,12 @@ function ch4_br_populate_columns( $column ) {
 		echo esc_html( get_post_meta( get_the_ID(), 'book_author', true ) );
 	}
 	elseif ( 'book_reviews_rating' == $column ) {
-		echo intval( get_post_meta( get_the_ID(), 'book_rating', true ) );
-		echo ' stars';
+		$rating = intval( get_post_meta( get_the_ID(), 'book_rating', true ) );
+        if ( $rating > 0 ) {
+            echo $rating . ' stars';
+        } else {
+            echo 'None Assigned';
+        }
 	}
 	elseif ( 'book_reviews_type' == $column ) {
 		$book_types = wp_get_post_terms( get_the_ID(), 'book_reviews_book_type' );

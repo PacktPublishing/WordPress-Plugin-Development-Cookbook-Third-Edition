@@ -15,6 +15,7 @@ function ch2pit_validate_css( $css ) {
     $csstidy->set_cfg( 'optimise_shorthands', 2 );
     $csstidy->set_cfg( 'template', 'low' );
     $csstidy->set_cfg( 'discard_invalid_properties', true );
+	$csstidy->set_cfg( 'remove_last_;', false );
 
     // Parse the CSS
     $csstidy->parse( $css );

@@ -1,6 +1,6 @@
 <?php
 
-if ( !defined( 'ch3mlm' ) ) {
+if ( !defined( 'ch3mlm' )  || !defined( 'ABSPATH' ) ) {
     exit;
 }
 

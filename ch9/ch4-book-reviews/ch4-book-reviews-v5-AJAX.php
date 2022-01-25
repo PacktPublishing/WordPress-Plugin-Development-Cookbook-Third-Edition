@@ -222,6 +222,10 @@ add_action( 'wp_ajax_nopriv_ch4_br_ajax', 'ch4_br_book_review_list' );
 function ch4_br_book_review_list() {
 	global $paged;
 	$output = '';
+	$output .= '<style>';
+    $output .= '.nav-previous, .nav-next ';
+    $output .= '{ cursor: pointer; text-decoration: none; }';
+    $output .= '</style>';
 	
 	if ( isset( $_POST['action'] ) && 'ch4_br_ajax' == $_POST['action'] ) {
 		check_ajax_referer( 'ch4_br_ajax' );
@@ -247,12 +251,15 @@ function ch4_br_book_review_list() {
 	if ( $book_review_query->have_posts() ) {
 		$output .= '<div id="book_review_table">';
 		$output .= '<table>';
-		$output .= '<tr><th><strong>Title</strong></th>';
-		$output .= '<th><strong>Author</strong></th></tr>';
+		$output .= '<tr><th style="text-align:left;">';
+		$output .= '<strong>Title</strong></th>';
+		$output .= '<th style="text-align:left;">';
+		$output .= '<strong>Author</strong></th></tr>';
 
 		while ( $book_review_query->have_posts() ) {
 			$book_review_query->the_post();
-			$output .= '<tr><td><a href="' . get_permalink();
+			$output .= '<tr><td style="padding-right: 20px">';
+			$output .= '<a href="' . get_permalink();
 			$output .= '">' . get_the_title( get_the_ID() );
 			$output .= '</a></td><td>';
 			$output .= esc_html( get_post_meta( get_the_ID(), 'book_author', true ) );

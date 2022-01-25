@@ -300,15 +300,19 @@ function ch4_br_book_review_list() {
 	if ( $book_review_query->have_posts() ) {
 		// Display posts in table layout
 		$output = '<table>';
-		$output .= '<tr><th><strong>Title</strong></th>';
-		$output .= '<th><strong>Author</strong></th></tr>';
+		$output .= '<tr><th style="text-align:left;"> ';
+		$output .= '<strong>Title</strong></th>';
+		$output .= '<th style="text-align:left">';
+		$output .= '<strong>Author</strong></th></tr>';
 
 		// Cycle through all items retrieved
 		while ( $book_review_query->have_posts() ) {
 			$book_review_query->the_post();
-			$output .= '<tr><td><a href="' . get_permalink() . '">';
-			$output .= get_the_title( get_the_ID() ) . '</a></td>';
-			$output .= '<td>' . esc_html( get_post_meta( get_the_ID(), 'book_author', true ) );
+			$output .= '<tr><td style="padding-right: 20px">';
+			$output .= '<a href="' . get_permalink();
+			$output .= '">' . get_the_title( get_the_ID() );
+			$output .= '</a></td><td>';
+			$output .= esc_html( get_post_meta( get_the_ID(), 'book_author', true ) );
 			$output .= '</td></tr>';
 		}
 
@@ -419,8 +423,12 @@ function ch4_br_populate_columns( $column ) {
 		echo esc_html( get_post_meta( get_the_ID(), 'book_author', true ) );
 	}
 	elseif ( 'book_reviews_rating' == $column ) {
-		echo intval( get_post_meta( get_the_ID(), 'book_rating', true ) );
-		echo ' stars';
+		$rating = intval( get_post_meta( get_the_ID(), 'book_rating', true ) );
+        if ( $rating > 0 ) {
+            echo $rating . ' stars';
+        } else {
+            echo 'None Assigned';
+        }
 	}
 	elseif ( 'book_reviews_type' == $column ) {
 		$book_types = wp_get_post_terms( get_the_ID(), 'book_reviews_book_type' );
@@ -543,6 +551,7 @@ function ch4_br_display_custom_quickedit_link( $column_name, $post_type ) {
 			<div>
 				<label><span class="title">Rating</span></label>
 				<select name="book_reviews_rating">
+				<option value="">None Assigned</option>
 				<?php
 				for ( $rating = 5; $rating >= 1; $rating-- ) { 
 				?> 
@@ -554,6 +563,7 @@ function ch4_br_display_custom_quickedit_link( $column_name, $post_type ) {
 			<div><label><span class="title">Type</span></label>
 			<?php $terms = get_terms( array( 'taxonomy' => 'book_reviews_book_type', 'hide_empty' => false ) ); ?>
 			<select name="book_reviews_type">
+			<option value="">None Assigned</option>
 			<?php foreach ($terms as $index => $term) {
 				echo '<option ';
 				echo 'value="' . $term->term_id . '"';
@@ -652,24 +662,35 @@ add_action( 'save_post', 'ch4_br_save_quick_edit_data', 10, 2 );
 
 function ch4_br_save_quick_edit_data( $ID = false, $post = false ) {
 	$post_item = get_post( $ID );
-	if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ( isset( $_POST['post_type'] ) && 'book_reviews' != $_POST['post_type'] ) || !current_user_can( 'edit_page', $ID ) ||  empty( $post_item ) ||  'revision' == $post->post_type ) {
-		return;
-	}
+	if ( ( isset( $_POST['post_type'] ) && 'book_reviews' != $_POST['post_type'] ) || !isset( $_POST['action'] ) || 'inline-save' != $_POST['action'] ) {
+        return;
+    }
 
 	if ( isset( $_POST['book_reviews_author'] ) ) {
 		update_post_meta( $ID, 'book_author', sanitize_text_field( $_POST['book_reviews_author'] ) );
-	}
+	} else {
+        update_post_meta( $ID, 'book_author', '' );
+    }
 
 	if ( isset( $_POST['book_reviews_rating'] ) ) { 
 		update_post_meta( $ID, 'book_rating', intval($_POST['book_reviews_rating']) );
-	}
+	} else {
+        update_post_meta( $ID, 'book_rating', '' );
+    }
 
-	if ( isset( $_POST['book_reviews_type'] ) ) {
+	if ( isset( $_POST['book_reviews_type'] )  && !empty( $_POST['book_reviews_type'] ) ) {
 		$term = term_exists( intval( $_POST['book_reviews_type'] ), 'book_reviews_book_type' );
 		if ( !empty( $term ) ) {
 			wp_set_object_terms( $ID, intval( $_POST['book_reviews_type'] ), 'book_reviews_book_type' );
 		}
-	}
+	} else {
+        $assigned_types = wp_get_post_terms( $ID, 'book_reviews_book_type' );
+        foreach( $assigned_types as $assigned_type ) {
+            wp_remove_object_terms( $ID, 
+                $assigned_type->term_id,
+                'book_reviews_book_type' );
+		}
+    }
 }
 
 /****************************************************************************

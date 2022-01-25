@@ -22,10 +22,10 @@ function ch2te_twitter_embed_shortcode( $atts ) {
 		$user_name = sanitize_text_field( $user_name );
 	}
     
-	$output = '<a class="twitter-timeline" href="';
+	$output = '<p><a class="twitter-timeline" href="';
 	$output .= esc_url( 'https://twitter.com/' . $user_name );
 	$output .= '">Tweets by ' . esc_html( $user_name );
-	$output .= '</a><script async ';
+	$output .= '</a></p><script async ';
 	$output .= 'src="//platform.twitter.com/widgets.js" ';
 	$output .= 'charset="utf-8"></script>';
     

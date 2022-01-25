@@ -21,7 +21,7 @@ function ch10brdw_dashboard_widget() {
 	if ( is_network_admin() ) {
         $sites_list = get_sites();
     } else {
-        $sites_list = array( 'blog_id' => 1 );
+        $sites_list = array( 'blog_id' => get_current_blog_id() );
     }
  
     foreach( $sites_list as $site ) {

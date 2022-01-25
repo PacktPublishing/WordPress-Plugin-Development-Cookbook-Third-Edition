@@ -68,9 +68,12 @@ function ch3sapi_admin_init() {
 		array( 'name' => 'select_list', 
 			'choices' => array( 'First', 'Second', 'Third' ) ) );
 
-	add_settings_field( 'text_area_desc', 'Text Area Example',
-		'ch3sapi_display_text_area', 'ch3sapi_settings_section',
-		'ch3sapi_main_section', array( 'name' => 'text_area_desc' ) );    
+	add_settings_field( 'ga_text_area', 'Big text field',
+        'ch3sapi_display_text_area', 
+        'ch3sapi_settings_section',
+        'ch3sapi_main_section',
+        array( 'name' => 'ga_text_area' ) );
+ 
 }
 
 // Validation function to be called when data is posted by user
@@ -155,7 +158,7 @@ function ch3sapi_settings_menu() {
 // configuration page
 function ch3sapi_config_page() { ?>
 	<div id="ch3sapi-general" class="wrap">
-	<h2>My Google Analytics</h2>
+	<h2>My Google Analytics - Settings API</h2>
 
 	<form name="ch3sapi_options_form_settings_api" method="post" action="options.php">
 

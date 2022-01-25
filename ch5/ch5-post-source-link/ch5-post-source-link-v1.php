@@ -15,9 +15,7 @@ add_action( 'add_meta_boxes', 'ch5_psl_register_meta_box' );
 
 // Create meta box to hold post source information
 function ch5_psl_register_meta_box() {
-	add_meta_box( 'ch5_psl_source_meta_box', 'Post/Page Source', 'ch5_psl_source_meta_box', 'post', 'normal' );
-
-	add_meta_box( 'ch5_psl_source_meta_box', 'Post/Page Source', 'ch5_psl_source_meta_box', 'page', 'normal' );
+	add_meta_box( 'ch5_psl_source_meta_box', 'Post/Page Source', 'ch5_psl_source_meta_box', array( 'post', 'page' ), 'normal' );
 }
 
 // Display meta box contents

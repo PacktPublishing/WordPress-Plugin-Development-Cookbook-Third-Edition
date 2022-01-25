@@ -11,8 +11,7 @@
 add_action( 'add_meta_boxes', 'ch5_cfa_register_meta_box' ); 
 
 function ch5_cfa_register_meta_box() {
-    add_meta_box( 'ch5_cfa_attach_file', 'File Attachment', 'ch5_cfa_attach_meta_box', 'post', 'normal' );
-    add_meta_box( 'ch5_cfa_attach_file', 'File Attachment', 'ch5_cfa_attach_meta_box', 'page', 'normal' );
+    add_meta_box( 'ch5_cfa_attach_file', 'File Attachment', 'ch5_cfa_attach_meta_box', array( 'post', 'page' ), 'normal' );
 } 
 
 function ch5_cfa_attach_meta_box( $post ) {

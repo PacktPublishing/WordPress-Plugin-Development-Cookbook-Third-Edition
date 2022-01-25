@@ -5,7 +5,7 @@ registerBlockType( 'ch6bt/twitter-feed', {
     icon: 'twitter',
     category: 'design',
     edit: () =>
-<a href="https://twitter.com/ylefebvre">Twitter Feed</a>,
+<p><a href="https://twitter.com/ylefebvre">Twitter Feed</a></p>,
     save: () =>
-<a href="https://twitter.com/ylefebvre">Twitter Feed</a>,
+<p><a href="https://twitter.com/ylefebvre">Twitter Feed</a></p>,
 } );

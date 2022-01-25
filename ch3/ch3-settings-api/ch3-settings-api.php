@@ -126,7 +126,7 @@ function ch3sapi_settings_menu() {
 // configuration page
 function ch3sapi_config_page() { ?>
 	<div id="ch3sapi-general" class="wrap">
-	<h2>My Google Analytics</h2>
+	<h2>My Google Analytics - Settings API</h2>
 
 	<form name="ch3sapi_options_form_settings_api" method="post" action="options.php">
 
