@@ -70,16 +70,16 @@ function ch11tf_transit_feed() {
 add_action( 'init', 'ch11tf_init' );
 
 function ch11tf_init() {
-	add_action( 'ch11th_transit_data_update', 'get_transit_data' );
+	add_action( 'ch11tf_transit_data_update', 'get_transit_data' );
 	register_deactivation_hook( __FILE__, 'ch11tf_deactivation' );
 	
-	if ( !wp_next_scheduled( 'ch11th_transit_data_update' ) ) { 
-		wp_schedule_event( time(), 'five_minutes', 'ch11th_transit_data_update' );
+	if ( !wp_next_scheduled( 'ch11tf_transit_data_update' ) ) { 
+		wp_schedule_event( time(), 'five_minutes', 'ch11tf_transit_data_update' );
 	}
 };
 
 function ch11tf_deactivation() {
-	wp_clear_scheduled_hook( 'ch11th_transit_data_update' );
+	wp_clear_scheduled_hook( 'ch11tf_transit_data_update' );
 }
 
 add_filter( 'cron_schedules', 'ch11tf_add_cron_period' );

@@ -135,9 +135,9 @@ function ch2pit_config_page() {
 
 	<!-- Code to display confirmation messages when settings are
 			saved or reset -->
-	<?php if ( isset( $_GET['message'] ) && $_GET['message'] == '1' ):?>
+	<?php if ( isset( $_GET['message'] ) && $_GET['message'] == '1' ) { ?>
 	<div id='message' class='updated fade'><p><strong>Settings Saved</strong></p></div>
-	<?php elseif ( isset( $_GET['message'] ) && $_GET['message'] == '2' ):?>
+	<?php } elseif ( isset( $_GET['message'] ) && $_GET['message'] == '2' ) { ?>
 		<div id='message' class='updated fade'><p><strong>Stylesheet reverted to original</strong></p></div>
 	<?php } ?>
 
