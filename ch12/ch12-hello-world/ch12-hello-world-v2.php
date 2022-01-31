@@ -1,6 +1,6 @@
 <?php
 /*
-  Plugin Name: Chapter 11 - Hello World V2
+  Plugin Name: Chapter 12 - Hello World V2
   Plugin URI: 
   Description: Companion to recipe 'Making admin page code ready for translation'
   Author: ylefebvre

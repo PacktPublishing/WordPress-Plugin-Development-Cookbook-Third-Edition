@@ -1,6 +1,6 @@
 <?php
 /*
-  Plugin Name: Chapter 11 - Hello World V1
+  Plugin Name: Chapter 12 - Hello World V1
   Plugin URI: 
   Description: Companion to recipe 'Adapting default user settings for translation'
   Author: ylefebvre

@@ -1,6 +1,6 @@
 <?php
 /*
-  Plugin Name: Chapter 11 - Hello World V4
+  Plugin Name: Chapter 12 - Hello World V4
   Plugin URI: 
   Description: Companion to recipe 'Loading a language file in the plugin initialization'
   Author: ylefebvre

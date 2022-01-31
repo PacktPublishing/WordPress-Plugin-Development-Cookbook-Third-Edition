@@ -1,6 +1,6 @@
 <?php
 /*
-  Plugin Name: Chapter 11 - Hello World V3
+  Plugin Name: Chapter 12 - Hello World V3
   Plugin URI: 
   Description: Companion to recipe 'Modifying shortcode output for translation'
   Author: ylefebvre
