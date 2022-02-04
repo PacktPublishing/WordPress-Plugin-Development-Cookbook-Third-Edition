@@ -221,8 +221,7 @@ add_action( 'wp_ajax_nopriv_ch4_br_ajax', 'ch4_br_book_review_list' );
 
 function ch4_br_book_review_list() {
 	global $paged;
-	$output = '';
-	$output .= '<style>';
+	$output = '<style>';
     $output .= '.nav-previous, .nav-next ';
     $output .= '{ cursor: pointer; text-decoration: none; }';
     $output .= '</style>';
