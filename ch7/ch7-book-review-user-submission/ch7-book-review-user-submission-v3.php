@@ -139,8 +139,8 @@ function ch7_brus_process_user_book_reviews() {
 	exit;
 }
 
-function ch7_brus_custom_wp_mail_from( $original_email ) {
-    return str_replace( 'wordpress@', 'bookreviews@', $original_email );
+function ch7_brus_custom_wp_mail_from( $orig_email ) {
+    return str_replace( 'wordpress@', 'bookreviews@', $orig_email );
 }
 
 function ch7_brus_custom_wp_mail_from_name( $original_from ) {	
@@ -160,7 +160,7 @@ function ch7_brus_send_email( $post_id, $post ) {
 	// Prepare e-mail message to notify site admin of new submission
 	$admin_mail = get_option( 'admin_email' );
 
-	$message = 'A user submitted a new book review.<br />';
+	$message = 'New user book review.<br />';
 	$message .= 'Book Title: ' . esc_html( $post->post_title ) . '<br />';
 
 	$message .= '<a href="' . add_query_arg( array( 'post_status' => 'draft', 'post_type' => 'book_reviews' ), admin_url( 'edit.php' ) ) . '">Moderate new book reviews</a>';

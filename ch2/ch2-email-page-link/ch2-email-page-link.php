@@ -21,19 +21,20 @@ function ch2epl_email_page_filter ( $the_content ) {
     // Append image with mailto link after content, including 
     // the item title and permanent URL
 	$new_content .= '<div class="email_link">';
-    $new_content .= '<a title="Email article link" ';
-	$new_content .= 'href="mailto:someone@somewhere.com?';
-	$new_content .= 'subject=Check out this interesting article '; 
-    $new_content .= 'entitled ' . get_the_title(); 
-    $new_content .= '&body=Hi!%0A%0AI thought you would enjoy '; 
-	$new_content .= 'this article entitled ';
-    $new_content .= get_the_title() . '.%0A%0A' . get_permalink(); 
+    $new_content .= '<a title="Email article link"';
+    $new_content .= 'href="mailto:someone@somewhere.com?';
+    $new_content .= 'subject=Check out this interesting ';
+    $new_content .= 'article entitled ';
+    $new_content .= get_the_title();
+    $new_content .= '&body=Hi!%0A%0AYou might ';
+    $new_content .= 'enjoy this article entitled ';
+    $new_content .= get_the_title() . '.%0A%0A';
+    $new_content .= get_permalink();
     $new_content .= '%0A%0AEnjoy!">';
 
-	$new_content .= '<img alt="Email icon" src="';
-	$new_content .= esc_url( $mail_icon_url ) . '" /></a>';
-	
-	$new_content .= '</div>';
+    $new_content .= '<img alt="Email icon" src="';
+    $new_content .= esc_url( $mail_icon_url );
+    $new_content .= '" /></a></div>';
 
     // Return filtered content for display on the site 
     return $new_content; 

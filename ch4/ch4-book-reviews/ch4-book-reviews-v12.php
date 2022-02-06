@@ -236,28 +236,39 @@ add_filter( 'the_excerpt', 'ch4_br_search_display' );
 add_filter( 'the_content', 'ch4_br_search_display' );
 
 function ch4_br_search_display( $content ) {
-	if ( !is_search() && 'book_reviews' != get_post_type() ) {
-		return $content;
-	}
+    if ( !is_search() &&
+            'book_reviews' != get_post_type() ) {
+        return $content;
+    }
 
-	$content = '<div style="float: right; margin: 10px">';
-	$content .= get_the_post_thumbnail( get_the_ID(), 'medium' );
-	$content .= '</div><div class="entry-content">';
+    $content =
+        '<div style="float: right; margin: 10px">'
+        . get_the_post_thumbnail( get_the_ID(),
+                                  'medium' )
+        . '</div><div class="entry-content">'
+        . '<strong>Author: </strong>'
+        . esc_html( get_post_meta( get_the_ID(),
+                          'book_author', true ) )
+        . '<br /><strong>Rating: </strong>';
 
-	$content .= '<strong>Author: </strong>';
-	$content .= esc_html( get_post_meta( get_the_ID(), 'book_author', true ) );
-	$content .= '<br />';
-        
-	$content .= '<strong>Rating: </strong>';
-	$nb_stars = intval( get_post_meta( get_the_ID(), 'book_rating', true ) );
-	$content .= str_repeat( '<img style="margin: 0" src="' . plugins_url( 'star-icon.png', __FILE__ ) . '" />', $nb_stars );
-	$content .= str_repeat( '<img style="margin: 0" src="' . plugins_url( 'star-icon-grey.png', __FILE__ ) . '" />', 5 - $nb_stars );
+    $nb_stars = intval( get_post_meta( get_the_ID(),
+                        'book_rating', true ) );
+    $content .=
+        str_repeat( '<img style="margin: 0" src="' . 
+        plugins_url( 'star-icon.png', __FILE__ ) 
+        . '" />', $nb_stars );
+    $content .=
+        str_repeat( '<img style="margin: 0" src="' . 
+        plugins_url( 'star-icon-grey.png', __FILE__ ) 
+        . '" />', 5 - $nb_stars );
 
-	$content .= '<br /><br />';
-	$content .= wp_trim_words( get_the_content( get_the_ID() ), 20 );
-	$content .= '</div>';
-	return $content;
+    $content .= '<br /><br />';
+    $content .= wp_trim_words(  
+        get_the_content( get_the_ID() ), 20 );
+    $content .= '</div>';
+    return $content;
 }
+
 
 add_filter( 'the_title', 'ch4_br_review_title', 10, 2 );
 
@@ -644,14 +655,15 @@ function ch4_br_quick_edit_link( $act, $post ) {
 		}
 
 		$idx = 'inline hide-if-no-js';
-		$act[$idx] = '<a href="#" class="editinline" ';
-		$act[$idx] .= " onclick=\"var reviewArray = ";
-		$act[$idx] .= "new Array('";
-		$act[$idx] .= "{$book_author}', '{$book_rating}', ";
-		$act[$idx] .= "'{$book_review_type}');";
-		$act[$idx] .=  "set_inline_book_reviews(reviewArray)\">";
-		$act[$idx] .= __( 'Quick&nbsp;Edit' );
-		$act[$idx] .= '</a>';
+		$act[$idx] = '<a href="#" class="editinline" '
+          . " onclick=\"var reviewArray = "
+          . "new Array('"
+          . "{$book_author}', '{$book_rating}', "
+          . "'{$book_review_type}');"
+          . "set_inline_book_reviews(reviewArray)\">"
+          . __( 'Quick&nbsp;Edit' )
+          . '</a>';
+
 	}
 	return $act;
 }
@@ -705,7 +717,8 @@ function ch4_br_format_book_review_title( $the_title ) {
         $book_author = esc_html( get_post_meta( get_the_ID(),  
                                    'book_author', true ) ); 
         if ( !empty( $book_author ) ) {
-            $the_title['title'] .= ' by ' . $book_author;
+            $the_title['title'] .= ' by ';
+			$the_title['title'] .= $book_author;
         }
     } 
  

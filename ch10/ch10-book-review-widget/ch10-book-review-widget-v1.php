@@ -24,7 +24,7 @@ class Book_Reviews extends WP_Widget {
 		parent::__construct( 'book_reviews',
 							 'Book Reviews',
 							 array( 'description' =>
-									'Displays list of recent book reviews' ) );
+									'Displays recent book reviews' ) );
 	}
 	
 		// Function to display widget contents
