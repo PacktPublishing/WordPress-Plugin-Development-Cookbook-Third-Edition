@@ -61,8 +61,7 @@ function ch9pud_conditionally_add_scripts_and_styles( $posts ) {
 
 	// Cycle through posts and set flag true if keyword is found
 	foreach ( $posts as $post ) {		
-		$shortcode_pos = stripos( $post->post_content, '[popup]', 0 );
-		if ( $shortcode_pos !== false ) {
+		if ( has_shortcode( $post->post_content, 'popup' ) ) {
 			$load_scripts = true;
 			return $posts;
 		}
