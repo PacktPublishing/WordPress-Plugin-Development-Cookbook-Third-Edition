@@ -72,7 +72,7 @@ We also provide a PDF file that has color images of the screenshots/diagrams use
 is a plugin developer who has created multiple plugins on the official WordPress repository. His first creation, Link Library, is used on thousands of sites worldwide. With a background in Computer Science, he wrote his first plugin in 2004 and quickly started sharing his creations with the community. He is actively involved in the Montreal WordPress community, has presented multiple times at WordCamp Montreal, and offers custom plugin development services. By day, Yannick works for CM Labs Simulations, a company providing software tools and simulators for vehicles and heavy equipment.
 
 
-## Other books by the authors
+## Other books by the author
 * [WordPress Plugin Development Cookbook - Second Edition](https://www.packtpub.com/product/wordpress-plugin-development-cookbook-second-edition/9781788291187?utm_source=github&utm_medium=repository&utm_campaign=9781788291187)
 
 
