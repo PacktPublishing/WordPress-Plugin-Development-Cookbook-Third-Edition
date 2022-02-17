@@ -10,11 +10,11 @@ This is the code repository for [WordPress Plugin Development Cookbook - Third E
 WordPress is one of the most widely used, powerful, and open content management systems (CMS). Whether you're a site owner trying to find the right extension, a developer who wants to contribute to the community, or a website developer working to fulfill a client's needs, learning how to extend WordPress' capabilities will help you to unleash its full potential. This book will help you become familiar with API functions to create secure plugins with easy-to-use administration interfaces.
 
 This book covers the following exciting features: 
-* Discover action and filter hooks which form the basis of plugin creation
+* Discover action and filter hooks, which form the basis of plugin creation
 * Explore the creation of administration pages and add new content management sections through custom post types and custom fields
-* Fetch, cache, and regularly update external site data
+* Add new components to the block editor library
+* Fetch, cache, and regularly update data from external sources
 * Bring in external data sources to enhance your content
-* Make your pages dynamic by using JavaScript, jQuery, and AJAX and adding new widgets to the platform
 
 If you feel this book is for you, get your [copy](https://www.amazon.com/dp/180181077X) today!
 
