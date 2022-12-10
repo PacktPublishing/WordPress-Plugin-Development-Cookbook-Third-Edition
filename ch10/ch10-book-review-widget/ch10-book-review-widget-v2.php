@@ -39,7 +39,7 @@ class Book_Reviews extends WP_Widget {
 		// Preparation of query string to retrieve book reviews
 		$query_array = array( 'post_type' => 'book_reviews',
 							'post_status' => 'publish',
-							'posts_per_page ' => $nb_reviews );
+							'posts_per_page' => $nb_reviews );
 
 		// Execution of post query
 		$book_review_query = new WP_Query();
