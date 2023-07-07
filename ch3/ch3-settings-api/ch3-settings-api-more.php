@@ -25,7 +25,7 @@ function ch3sapi_get_options() {
     $new_options['ga_account_name'] = 'UA-0000000-0'; 
     $new_options['track_outgoing_links'] = false;
 	$new_options['select_list'] = 'First';
-	$new_options['text_area_desc'] = 'This is a test';
+	$new_options['ga_text_area'] = 'This is a test';
 	
     $merged_options = wp_parse_args( $options, $new_options ); 
 
